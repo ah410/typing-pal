@@ -1,4 +1,4 @@
 const loadTestButton = document.getElementById('startTestButton')
 loadTestButton.addEventListener('click', function() {
-    window.location.href = 'startTest.html'
+    window.location.href = 'speedTest.html'
 })
