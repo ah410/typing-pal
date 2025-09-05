@@ -1,5 +1,15 @@
-// Fetch the API URL and get reference to HTML elements
-const RANDOM_QUOTE_API_URL = 'https://api.quotable.io/random';
+// Create your query
+const query = `
+    query {
+        randomQuote {
+            id
+            text
+            author
+        }
+    }
+`;
+
+// Get reference to HTML elements
 const quoteDisplayElement = document.getElementById('quoteDisplay');
 const quoteInputElement = document.getElementById('quoteInput');
 const timerElement = document.getElementById('timer');
@@ -68,18 +78,22 @@ quoteInputElement.addEventListener('keyup', function(event) {
 
 
 // Use quotable api to recieve a random quote 
-function getRandomQuote() {
-    return fetch(RANDOM_QUOTE_API_URL)
+function getRandomQuote() {    
+    return fetch('https://quotes-api-kappa-eight.vercel.app/graphql', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query }),
+    })
         .then(response => {
-            if(!response.ok) {
-                // Used to handle HTTP response status codes
-                throw new Error('Failed to fetch data (${response.status})');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
             return response.json();
         })
-        .then(data => data.content)
+        .then(data => data.data.randomQuote.text)
         .catch(error => {
-            // Used to handle promise errors anywhere in the chain
             console.error('Error:', error);
         });
 }
